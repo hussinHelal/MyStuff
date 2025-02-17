@@ -61,5 +61,9 @@ lazy.setup({
   { "rose-pine/neovim", name = "rose-pine" },
 })
 
+
+-- Show line numbers
+vim.opt.number = true       -- Show line numbers
+vim.opt.relativenumber = true   -- Show relative line numbers (optional)
 -- After the setup, add this line to set a theme
 vim.cmd[[colorscheme tokyonight]]
