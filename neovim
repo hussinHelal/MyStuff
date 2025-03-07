@@ -21,7 +21,6 @@ vim.g.maplocalleader = " "
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 print("Lazy.nvim path: " .. lazypath)
-
 if not vim.loop.fs_stat(lazypath) then
   print("Installing lazy.nvim...")
   vim.fn.system({
@@ -34,7 +33,6 @@ if not vim.loop.fs_stat(lazypath) then
   })
   print("Lazy.nvim installation complete")
 end
-
 vim.opt.rtp:prepend(lazypath)
 print("Added lazy.nvim to runtimepath")
 
@@ -44,16 +42,9 @@ if not status_ok then
   print("Failed to load lazy.nvim: " .. tostring(lazy))
   return
 end
-
 print("Lazy.nvim loaded successfully")
 
-lazy.setup({
-  -- Plugins will go here
-})
-
-
-in init.lua
-
+-- Setup plugins
 lazy.setup({
   -- Add these theme plugins
   { "folke/tokyonight.nvim" },
@@ -61,9 +52,9 @@ lazy.setup({
   { "rose-pine/neovim", name = "rose-pine" },
 })
 
-
 -- Show line numbers
 vim.opt.number = true       -- Show line numbers
 vim.opt.relativenumber = true   -- Show relative line numbers (optional)
+
 -- After the setup, add this line to set a theme
 vim.cmd[[colorscheme tokyonight]]
