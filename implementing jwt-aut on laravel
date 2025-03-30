@@ -1,0 +1,229 @@
+1.Installing the JWT-Auth Package
+
+(install api : php artisan install:api)
+
+Run the following command to install the JWT package:
+
+composer require tymon/jwt-auth
+
+After installation, publish the package configuration:
+
+php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+
+This will create a config/jwt.php file where you can customize the JWT settings.
+2.Generate JWT Secret Key
+
+Run the following command to generate a secret key:
+
+php artisan jwt:secret
+
+This key will be stored in your .env file:
+
+JWT_SECRET=strong_secret_word
+
+3. Configure the Authentication Guard
+
+Modify the config/auth.php file and set the guard driver to jwt:
+
+'guards' => [
+    'api' => [
+        'driver' => 'jwt',
+        'provider' => 'users',
+    ],
+],
+
+4. Modify the User Model
+
+In app/Models/User.php (or app/User.php in older versions), implement the JWTSubject interface:
+
+use Tymon\JWTAuth\Contracts\JWTSubject;
+
+class User extends Authenticatable implements JWTSubject
+{
+    /**
+     * Get the identifier that will be stored in the JWT token.
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return an array with custom claims to be added to the JWT token.
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+}
+
+5. Create Authentication Controller
+
+Generate a new controller:
+
+php artisan make:controller AuthController
+
+Inside app/Http/Controllers/AuthController.php, implement the login, register, and logout functions:
+
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+
+class AuthController extends Controller
+{
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        try {
+            $token = JWTAuth::fromUser($user);
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Could not create token'], 500);
+        }
+
+        return response()->json([
+            'token' => $token,
+            'user' => $user,
+        ], 201);
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        try {
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'Invalid credentials'], 401);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Could not create token'], 500);
+        }
+
+        return response()->json([
+            'token' => $token
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
+        ]);
+    }
+
+    public function logout()
+    {
+        try {
+            JWTAuth::invalidate(JWTAuth::getToken());
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Failed to logout, please try again'], 500);
+        }
+
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    public function getUser()
+    {
+        try {
+            $user = Auth::user();
+            if (!$user) {
+                return response()->json(['error' => 'User not found'], 404);
+            }
+            return response()->json($user);
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Failed to fetch user profile'], 500);
+        }
+    }
+
+    public function updateUser(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $user->update($request->only(['name', 'email']));
+            return response()->json($user);
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Failed to update user'], 500);
+        }
+    }
+}
+
+6. Middleware
+
+You can also create middleware to protect routes:
+
+php artisan make:middleware JwtMiddleware
+
+In app/Http/Middleware/JwtMiddleware.php, update the handle function:
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Exception;
+use Illuminate\Http\Request;
+
+class JwtMiddleware
+{
+    public function handle(Request $request, Closure $next)
+    {
+        try {
+            JWTAuth::parseToken()->authenticate();
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return $next($request);
+    }
+}
+
+in Laravel 12, middleware registration has been moved to the bootstrap/app.php file.
+
+    ->withMiddleware(function (Middleware $middleware) {
+        //
+        $middleware->alias([
+            'jwt' => JwtMiddleware::class
+        ]);
+    })
+
+7. Define API Routes
+
+Open routes/api.php and add these routes:
+
+<?php
+
+use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    return response()->json(['message' => 'Hello world!']);
+});
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('jwt')->group(function () {
+    Route::get('/user', [AuthController::class, 'getUser']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::put('/user', [AuthController::class, 'updateUser']);
+});
+
+Define API Routes
+
+se Postman or any API testing tool to test the following endpoints:
+
+    POST /register: Register a new user.
+    POST /login: Log in and get a JWT token.
+    GET /user: Fetch the authenticated user's details (requires JWT token).
+    POST /logout: Invalidate the JWT token.
+    POST /refresh: Refresh the JWT token.
