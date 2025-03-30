@@ -1,0 +1,44 @@
+For a Laravel project to function properly on a Linux server, you need to set the correct file and directory permissions. Here are the recommended settings:
+1. Set the Correct Directory Permissions
+
+    Laravel requires the storage and bootstrap/cache directories to be writable.
+
+    Set proper permissions using:
+
+    sudo chown -R www-data:www-data storage bootstrap/cache
+    sudo chmod -R 775 storage bootstrap/cache
+
+        www-data is the web server user (for Apache/Nginx, adjust if needed).
+
+        775 gives read, write, and execute permissions to the owner and group but only read and execute permissions to others.
+
+2. Set the Correct File Permissions
+
+    Ensure that other files and directories are set correctly:
+
+    sudo find . -type f -exec chmod 644 {} \;
+    sudo find . -type d -exec chmod 755 {} \;
+
+        644 (for files) allows read and write for the owner, read-only for others.
+
+        755 (for directories) allows read, write, and execute for the owner, read and execute for others.
+
+3. Fix storage/logs/laravel.log Issues
+
+    If Laravel logs cannot be written:
+
+    sudo chmod -R 775 storage/logs
+
+4. Ensure .env Security
+
+    The .env file contains sensitive data. Set it to be readable only by the owner:
+
+    sudo chmod 600 .env
+
+5. Set Up SELinux (If Enabled)
+
+    If your system uses SELinux, you might need to adjust the security context:
+
+    sudo chcon -R -t httpd_sys_rw_content_t storage bootstrap/cache
+
+By setting these permissions correctly, your Laravel project should function without permission-related issues. Let me know if you encounter any problems!
