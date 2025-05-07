@@ -1,0 +1,1 @@
+To Generate ssh key for laravel project use this command ->   ssh-keygen -t rsa -b 4096
