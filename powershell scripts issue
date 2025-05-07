@@ -1,0 +1,6 @@
+"in case of cannot be loaded because running scripts is disabled on this system." 
+
+"do this"
+
+#without the "" ofc "
+" Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser "
