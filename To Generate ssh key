@@ -1,2 +1,2 @@
 To Generate ssh key for laravel project use this command ->   ssh-keygen -t rsa -b 4096
-And you need to do this befora generating ssh key   vandor/bin/homestead make 
+And you need to do this in the project folder before generating ssh key   vendor/bin/homestead make 
