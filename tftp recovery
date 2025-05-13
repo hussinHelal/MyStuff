@@ -1,45 +1,3 @@
- README
-TP-Link TL-WR840N V5
-Router Configuration with Original Firmware
-Hardware version: TL-WR840N v5 00000005
-Firmware version: 0.9.1 3.16 v0001.0 Build 211109 Rel.72604n
-MAC Address:
-Default SSID: TP-Link_50B4
-Default Password:
-Default Username: admin
-Default Password: admin
-Default IP: 192.168.0.1
-Router Configuration with OpenWRT Firmware
-Default SSID: Wi-Fi is disabled by default.
-Default Username: root
-Default Password: No password is set by default.
-Default IP: 192.168.1.1
-Setup router as an Access Point (Original Firmware)
-Reset the Router by holding the RESET button on the back for 10 seconds.
-Connect the router to PC via ethernet cable.
-Alternatively, join the Wi-Fi network.
-Goto 192.168.0.1
-Login as admin.
-Click on Quick Setup.
-Click Next.
-Select Access Point and click Next.
-Enable Wireless, Set Wireless Network Name, Security Type and Wireless Password.
-Check More Advanced Wireless Settings. Set Mode to 11bgn mixed, Channel Width and Channel to Auto.
-Click Next.
-Select Lan Type as Static IP. Set a Static IP to access the Web Interface (Eg. 192.168.1.100) and Subnet Mask (255.255.255.0). Reserve the same Static IP in the DHCP Reservation list on the Main Router.
-Disable DHCP server and click Next.
-Review all the settings and click Finish.
-Now connect the LAN port of this router to the LAN port of the Main Router.
-We should now have working internet through this Access Point. Connect with the configured Wi-Fi SSID and password.
-Switch Official Firmware with OpenWRT Firmware
-Download the latest OpenWRT Firmware for TL-WR840N v5. Image is added in the Firmwares folder. (Last upgrade for v5 was in version 18.06.9)
-Open the Web Interface and login as admin.
-Click on System Tools and then Firmware Upgrade.
-Click on Choose File and select the downloaded file.
-Click on Upgrade and wait for the process to finish.
-Once the Router Firmware installation finishes, (LED stops blinking), connect the router to PC and goto 192.168.1.1
-OpenWRT Lucy Interface will open up. Click on Login.
-OpenWRT is ready to be used.
 Restore from OpenWRT Firmware to Official Firmware
 Download the original image for TL-WR840N v5. Image is added in the Firmwares folder.
 Rename the image to originalfw.bin.
@@ -48,29 +6,3 @@ Rebuild the image without the boot partition. dd if=originalfw.bin of=originalfw
 Flash the stripped image using sysupgrade. sysupgrade originalfw_stripped.bin
 Wait for the router to finish the flashing process. Indicated by the blinking LEDs.
 Restoration should be completed and the router will be reset to its default IP address, Wireless SSID and Passwords.
-Fix broken Firmware Upgrade (Alternating red and green LED blinking on router / No Web Interface / No SSH / Bricked Router)
-Setup TFTP on your PC (Refer Setup TFTP on Windows/Mac/Linux link from the References section.)
-Adding TFTP setup for Linux here as I restored my Router on a Linux Machine.
-Install atftpd. sudo apt install atftpd
-Create a dir for saving the image to upload to router. sudo mkdir /srv/tftp
-Download the tftp recovery image for TL-WR840N v5. Image is added in the Firmwares folder.
-Rename the image to tp_recovery.bin and copy it to the dir created above. sudo cp /path/to/firmware/tp_recovery.bin /srv/tftp
-Change the ownership of the folder and file inside. chown nobody:nogroup -R /srv/tftp
-Start the tftp server. atftpd --daemon --no-fork --logfile - /srv/tftp
-Check if the tftp server is listening. netstat -lunp | grep 69
-Set computer ethernet static IP to 192.168.0.66 (Edit the /etc/dhcpcd.conf and systemctl restart dhcpcd)
-Connect Router and PC via ethernet cable.
-Turn off router. Press and hold the reset button and turn on router. (VERY IMPORTANT❗️)
-Once the LED becomes green leave the reset button. The flashing process should start. This will be indicated by the flashing LEDs.
-Wait for the flashing to complete. This should take about 4-5 minutes.
-Now the SSH should be available.
-SSH into the router. ssh root@192.168.1.1
-Now from here if you want to go to original firmware, follow the steps in Restore from OpenWRT Firmware to Official Firmware section.
-If you want to roll back to the working OpenWRT firmware, follow the steps below.
-SSH into the router. ssh root@192.168.1.1
-Check for free memory. Memory should equal to or more than the size of firmware image. free
-Download the working copy of OpenWRT Firmware for TL-WR840N v5. Image is added in the Firmwares folder.
-Copy the image to the router. ssh root@192.168.1.1 "cat > /tmp/openwrt-18.06.9-ramips-mt76x8-tl-wr840n-v5-squashfs-sysupgrade.bin" < /path/to/firmware/openwrt-18.06.9-ramips-mt76x8-tl-wr840n-v5-squashfs-sysupgrade.bin
-Flash the image using sysupgrade. sysupgrade -v /tmp/openwrt-18.06.9-ramips-mt76x8-tl-wr840n-v5-squashfs-sysupgrade.bin
-Wait for the router to finish the flashing process. Indicated by the blinking LEDs.
-Now the router should be restored to the OpenWRT defaults.
