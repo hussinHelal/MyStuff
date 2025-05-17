@@ -1,0 +1,9 @@
+{
+	"save_on_focus_lost": true,
+	"font_face": "Fira Code Regular",
+	"font_options":
+[
+    "gray_antialias",
+    "subpixel_antialias"
+], 
+}
