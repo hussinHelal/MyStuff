@@ -1,0 +1,14 @@
+after you install laravel/installer on ubuntu or any other distro you should add it to the path like this 
+
+
+first check if laravel is actually installed 
+  $ composer global list | grep laravel
+
+then find composer global path
+  $ composer global config bin-dir --absolute
+
+ and then you can finally add it to path like this 
+
+  # $HOME should work but if it didn't replace it with composer full path like this /home/username/.config/composer/vendor/bin
+ $ echo 'export PATH="$PATH:$HOME/.composer/vendor/bin"' >> ~/.bashrc
+ $ source ~/.bashrc
