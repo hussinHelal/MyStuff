@@ -1,0 +1,18 @@
+Install Required PHP Extensions
+First, install the necessary extensions for Laravel:
+sudo dnf install php-mbstring php-xml php-bcmath php-curl php-gd php-mysql php-zip php-intl php-soap php-xmlrpc php-json php-openssl
+
+/etc/php.ini
+
+extension=mbstring
+extension=xml
+extension=bcmath
+extension=curl
+extension=gd
+extension=pdo_mysql
+extension=zip
+extension=intl
+extension=soap
+extension=xmlrpc
+extension=json
+extension=openssl
