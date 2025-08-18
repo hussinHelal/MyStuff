@@ -1,14 +1,7 @@
-# Backup your existing config (if you want to keep it)
-mv ~/.config/nvim ~/.config/nvim.backup
-
 # Create fresh directory
-mkdir -p ~/.config/nvim
+#mkdir -p ~/.config/nvim
 
-# Clean up lazy installation
-rm -rf ~/.local/share/nvim/lazy
-
-
-nvim ~/.config/nvim/init.lua
+#nvim ~/.config/nvim/init.lua
 
 
 -- Set leader key first
