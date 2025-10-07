@@ -1,0 +1,18 @@
+Common reasons:
+1. Home directory protection
+Many systems have additional protections on home directories. Check the exact permissions:
+bashls -ld /home
+ls -ld /home/h
+ls -ld /home/h/code
+All three need the execute bit (x) for "others" to allow Apache to traverse the path.
+2. SELinux context (if enabled)
+Even on Arch, if you have SELinux enabled, files need the correct security context. Check if SELinux is active:
+bash getenforce
+
+
+
+
+Fix: Add your user to the docker group
+bashsudo usermod -aG docker $USER
+
+newgrp docker
