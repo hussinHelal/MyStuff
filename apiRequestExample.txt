@@ -1,0 +1,2 @@
+❯ curl -X POST http://localhost/api/user         -H Content-Type: application/json         -H Accept: application/json          |jq
+
