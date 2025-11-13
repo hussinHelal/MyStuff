@@ -2,5 +2,5 @@
 
 "do this"
 
-#without the "" ofc "
+
 " Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser "
