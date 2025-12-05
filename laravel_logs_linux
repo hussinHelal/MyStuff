@@ -1,0 +1,3 @@
+for laravel log permissin denied error on linux you need to fix the selinux with this command 
+
+chcon -Rt svirt_sandbox_file_t $(pwd)
