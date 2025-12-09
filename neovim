@@ -8,7 +8,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -22,20 +21,14 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Initialize lazy.nvim
 local status_ok, lazy = pcall(require, "lazy")
 
 -- Setup plugins
 lazy.setup({
-  -- Add these theme plugins
-  { "folke/tokyonight.nvim" },
   { "catppuccin/nvim", name = "catppuccin" },
-  { "rose-pine/neovim", name = "rose-pine" },
 })
 
--- Show line numbers
 vim.opt.number = true       -- Show line numbers
 vim.opt.relativenumber = true   -- Show relative line numbers (optional)
 
--- After the setup, add this line to set a theme
-vim.cmd[[colorscheme tokyonight]]
+vim.cmd[[colorscheme catppuccin]]
