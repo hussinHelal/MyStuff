@@ -1,0 +1,11 @@
+export WORK_DIR=~/yask
+mkdir -p  && cd 
+
+export KERNEL_LOC_DIR=common_gki
+export KERNEL_NAME=common
+export KERNEL_REPO=https://android.googlesource.com/kernel/common
+export KERNEL_BRANCH=android13-5.15-lts
+export DEFCONFIG_NAME=gki_defconfig
+export LOCAL_VERSION=-YASK-GKI
+export OUTPUT_NAME=Image.gki.ksu
+export BUILD_TIME=2026-09-20

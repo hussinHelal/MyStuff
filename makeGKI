@@ -1,0 +1,1 @@
+SKIP_MRPROPER=1 SKIP_DEFCONFIG=1 KMI_SYMBOL_LIST_STRICT_MODE=0 TRIM_NONLISTED_KMI=0 LTO=thin BUILD_CONFIG=common_gki/common/build.config.gki.aarch64 build/build.sh -j16

@@ -1,0 +1,3 @@
+cd ~/yask/common_gki/common
+export PATH=~/yask/prebuilts/clang/host/linux-x86/clang-r547379/bin:/home/hussin/.local/bin:/home/hussin/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
+make LLVM=1 ARCH=arm64      O=~/yask/out/android13-5.15/common_gki/common      M=drivers/net/wireless/rtl8188eus_android15      modules -j16
