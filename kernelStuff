@@ -1,0 +1,3 @@
+Here is everything from this session as one sequence for the new source. It starts with a clean-slate check, then patches, KSU/SUSFS/BBG, the driver, and the defconfig. Run it from the new source root. I've set <SRC> as a placeholder for its path.
+
+0. Variables
