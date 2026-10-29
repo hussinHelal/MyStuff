@@ -1,0 +1,9 @@
+groupadd -r mysql
+useradd -r -g mysql -d /var/lib/mysql -s /usr/sbin/nologin mysql
+mkdir -p /var/lib/mysql /run/mysqld
+chown -R mysql:mysql /var/lib/mysql /run/mysqld
+
+printf '#!/bin/sh\nexit 101\n' > /usr/sbin/policy-rc.d
+chmod +x /usr/sbin/policy-rc.d
+
+dpkg --configure -a
